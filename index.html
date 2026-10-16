@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NEXUS CYBER | Digital Services</title>
+  <meta name="description" content="NEXUS CYBER provides online application assistance, document services, computer training and digital support in Kenya.">
+
+  <style>
+    :root {
+      --navy: #10213b;
+      --blue: #2563eb;
+      --light-blue: #eff6ff;
+      --white: #ffffff;
+      --text: #253247;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --green: #16a34a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f8fafc;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .navbar {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+
+    .brand span {
+      color: var(--blue);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 0.94rem;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      color: var(--blue);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 20px;
+      border-radius: 9px;
+      background: var(--blue);
+      color: var(--white);
+      font-weight: 700;
+      border: 1px solid var(--blue);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .button:hover {
+      background: #1d4ed8;
+    }
+
+    .button-outline {
+      background: transparent;
+      color: var(--navy);
+      border-color: #cbd5e1;
+    }
+
+    .button-outline:hover {
+      background: var(--light-blue);
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 85% 20%, #294b7b 0, transparent 35%),
+        var(--navy);
+      color: var(--white);
+      padding: 90px 0 85px;
+    }
+
+    .hero-content {
+      max-width: 760px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border: 1px solid #49617f;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      color: #dbeafe;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.3rem);
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 span {
+      color: #93c5fd;
+    }
+
+    .hero p {
+      color: #dbe5f3;
+      font-size: 1.08rem;
+      max-width: 620px;
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero .button-outline {
+      color: white;
+      border-color: #64748b;
+    }
+
+    .hero .button-outline:hover {
+      background: #203958;
+    }
+
+    .trust-strip {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+    }
+
+    .trust-items {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px 36px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .trust-items span::before {
+      content: "✓";
+      color: var(--green);
+      font-weight: 800;
+      margin-right: 8px;
+    }
+
+    section {
+      padding: 76px 0;
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+    }
+
+    .search-box {
+      max-width: 650px;
+      margin: 0 auto 32px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-box input {
+      width: 100%;
+      min-width: 0;
+      padding: 14px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 1rem;
+      background: white;
+      color: var(--text);
+    }
+
+    .search-box input:focus {
+      outline: 3px solid #bfdbfe;
+      border-color: var(--blue);
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 25px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgb(15 23 42 / 7%);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      background: var(--light-blue);
+      border-radius: 12px;
+      font-size: 1.5rem;
+      margin-bottom: 18px;
+    }
+
+    .service-card h3 {
+      color: var(--navy);
+      margin-bottom: 10px;
+      font-size: 1.12rem;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      font-size: 0.94rem;
+      margin-bottom: 18px;
+    }
+
+    .text-link {
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 0.94rem;
+    }
+
+    .no-results {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      padding: 24px;
+    }
+
+    .tracking {
+      background: var(--light-blue);
+    }
+
+    .tracking-panel {
+      max-width: 720px;
+      margin: 0 auto;
+      background: white;
+      padding: 32px;
+      border: 1px solid #dbeafe;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .tracking-panel h2 {
+      color: var(--navy);
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .tracking-panel p {
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .tracking-panel .button {
+      margin: 4px;
+    }
+
+    .notice {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .about-grid h2 {
+      color: var(--navy);
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+
+    .about-grid p {
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .about-panel {
+      background: var(--navy);
+      color: white;
+      padding: 30px;
+      border-radius: 16px;
+    }
+
+    .about-panel h3 {
+      margin-bottom: 16px;
+      font-size: 1.25rem;
+    }
+
+    .about-panel p {
+      color: #dbe5f3;
+      margin-bottom: 12px;
+    }
+
+    .contact {
+      background: white;
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-card {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .contact-card h2 {
+      color: var(--navy);
+      margin-bottom: 12px;
+      font-size: 2rem;
+    }
+
+    .contact-card p {
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    footer {
+      background: #0b1729;
+      color: #cbd5e1;
+      padding: 30px 0;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    footer p + p {
+      margin-top: 8px;
+    }
+
+    .disclaimer {
+      max-width: 800px;
+      margin: 12px auto 0;
+      color: #94a3b8;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 800px) {
+      .nav-links {
+        gap: 12px;
+        font-size: 0.85rem;
+      }
+
+      .nav-links .button {
+        padding: 9px 12px;
+      }
+
+      .service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .navbar {
+        padding: 15px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .hero {
+        padding: 65px 0;
+      }
+
+      section {
+        padding: 55px 0;
+      }
+
+      .service-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-box {
+        flex-direction: column;
+      }
+
+      .search-box .button {
+        width: 100%;
+      }
+
+      .tracking-panel,
+      .contact-card {
+        padding: 24px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container navbar">
+      <a class="brand" href="#" aria-label="NEXUS CYBER home">
+        NEXUS <span>CYBER</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#services">Services</a>
+        <a href="#tracking">Track Request</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="button">Contact Us</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <span class="eyebrow">Your digital services partner</span>
+
+        <h1>Online services, made <span>simpler.</span></h1>
+
+        <p>
+          Get assistance with online applications, document preparation,
+          tax-related services, computer training and more — all through
+          NEXUS CYBER.
+        </p>
+
+        <div class="hero-actions">
+          <a class="button" href="#services">Explore Services</a>
+          <a class="button button-outline" href="#tracking">
+            Track a Request
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip">
+      <div class="container trust-items">
+        <span>Clear service information</span>
+        <span>Customer support</span>
+        <span>Transparent pricing as confirmed</span>
+      </div>
+    </div>
+
+    <section id="services">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Our Services</h2>
+          <p>
+            Find the digital service you need. Search by service name
+            or browse the categories below.
+          </p>
+        </div>
+
+        <div class="search-box">
+          <input
+            type="search"
+            id="serviceSearch"
+            placeholder="Search services..."
+            aria-label="Search services"
+          >
+          <button class="button" id="searchButton" type="button">
+            Search
+          </button>
+        </div>
+
+        <div class="service-grid" id="serviceGrid">
+          <article class="service-card" data-search="government ecitizen birth marriage certificate passport identity forms appointments">
+            <div class="service-icon" aria-hidden="true">🏛️</div>
+            <h3>Government & eCitizen</h3>
+            <p>
+              Assistance navigating eligible government portals,
+              application forms and document requirements.
+            </p>
+            <a class="text-link" href="#contact">Enquire about service →</a>
+          </article>
+
+          <article class="service-card" data-search="kra tax pin returns tax compliance certificate">
+            <div class="service-icon" aria-hidden="true">📄</div>
+            <h3>KRA & Tax Services</h3>
+            <p>
+              Guidance with KRA portal access, PIN-related procedures
+              and tax return preparation assistance.
+            </p>
+            <a class="text-link" href="#contact">Enquire about service →</a>
+          </article>
+
+          <article class="service-card" data-search="jobs careers cv resume cover letter job search documents">
+            <div class="service-icon" aria-hidden="true">💼</div>
+            <h3>Jobs & Careers</h3>
+            <p>
+              CV preparation, cover letters and assistance preparing
+              job application documents.
+            </p>
+            <a class="text-link" href="#contact">Enquire about service →</a>
+          </article>
+
+          <article class="service-card" data-search="business registration business name documents">
+            <div class="service-icon" aria-hidden="true">🏢</div>
+            <h3>Business Services</h3>
+            <p>
+              Guidance with eligible business registration procedures
+              and supporting documents.
+            </p>
+            <a class="text-link" href="#contact">Enquire about service →</a>
+          </article>
+
+          <article class="service-card" data-search="printing photocopy scanning typing formatting conversion documents">
+            <div class="service-icon" aria-hidden="true">🖨️</div>
+            <h3>Printing & Documents</h3>
+            <p>
+              Printing, photocopying, scanning, typing, formatting
+              and document conversion.
+            </p>
+            <a class="text-link" href="#contact">Enquire about service →</a>
+          </article>
+
+          <article class="service-card" data-search="computer training packages word processing spreadsheets presentations internet email">
+            <div class="service-icon" aria-hidden="true">💻</div>
+            <h3>Computer Training</h3>
+            <p>
+              Learn computer basics, office applications, email
+              and essential online skills.
+            </p>
+            <a class="text-link" href="#contact">Enquire about service →</a>
+          </article>
+
+          <article class="service-card" data-search="sha health registration health services portal">
+            <div class="service-icon" aria-hidden="true">🩺</div>
+            <h3>SHA & Health Services</h3>
+            <p>
+              Assistance navigating supported health-service portals
+              and eligible registration procedures.
+            </p>
+            <a class="text-link" href="#contact">Enquire about service →</a>
+          </article>
+
+          <article class="service-card" data-search="general online services registrations forms official websites enquiries">
+            <div class="service-icon" aria-hidden="true">🌐</div>
+            <h3>General Online Services</h3>
+            <p>
+              Help finding official websites, completing eligible forms
+              and navigating online services.
+            </p>
+            <a class="text-link" href="#contact">Enquire about service →</a>
+          </article>
+        </div>
+
+        <p class="no-results" id="noResults" role="status">
+          No matching services found. Try another search term.
+        </p>
+      </div>
+    </section>
+
+    <section class="tracking" id="tracking">
+      <div class="container">
+        <div class="tracking-panel">
+          <h2>Track Your Request</h2>
+          <p>
+            A customer request-tracking system will be added in a later
+            development stage. For now, contact NEXUS CYBER for assistance
+            with an existing request.
+          </p>
+          <a href="#contact" class="button">Request Assistance</a>
+          <p class="notice">
+            Online tracking is not active in this initial website version.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container about-grid">
+        <div>
+          <h2>Digital assistance you can understand</h2>
+          <p>
+            NEXUS CYBER aims to make digital services easier to navigate
+            through clear information, document assistance and customer
+            support.
+          </p>
+          <p>
+            Service availability, requirements, fees and processing
+            expectations will be confirmed before a service is offered.
+          </p>
+        </div>
+
+        <div class="about-panel">
+          <h3>Our service commitment</h3>
+          <p>✓ Clear information about services</p>
+          <p>✓ Pricing confirmed before paid work</p>
+          <p>✓ Respect for customer privacy</p>
+          <p>✓ Honest updates about service progress</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="contact-card">
+          <h2>Need assistance?</h2>
+          <p>
+            Contact NEXUS CYBER to enquire about a service, ask a question
+            or find out which documents may be required.
+          </p>
+          <p>
+           <section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-card">
+      <h2>Need assistance?</h2>
+
+      <p>Contact NEXUS CYBER for service enquiries.</p>
+
+      <p>
+        <strong>Phone / WhatsApp:</strong>
+        <a href="tel:+254741666519">+254 741 666 519</a>
+      </p>
+
+      <p>
+        <strong>Business hours:</strong>
+        Monday–Saturday, 8:00 AM–9:00 PM
+      </p>
+
+      <div class="hero-actions" style="justify-content: center; margin-top: 22px;">
+        <a class="button" href="https://wa.me/254741666519"
+           target="_blank" rel="noopener noreferrer">
+          Chat on WhatsApp
+        </a>
+
+        <a class="button button-outline" href="tel:+254741666519">
+          Call Us
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <footer>
+    <div class="container">
+      <p><strong>NEXUS CYBER</strong> — Digital Services</p>
+      <p>© <span id="currentYear"></span> NEXUS CYBER. All rights reserved.</p>
+      <p class="disclaimer">
+        NEXUS CYBER is an independent service business and is not a
+        government agency. Government and third-party decisions and
+        processing times are outside our control.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById("serviceSearch");
+    const searchButton = document.getElementById("searchButton");
+    const serviceCards = document.querySelectorAll(".service-card");
+    const noResults = document.getElementById("noResults");
+
+    function searchServices() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      serviceCards.forEach((card) => {
+        const searchableText =
+          card.innerText + " " + (card.dataset.search || "");
+
+        const matches = searchableText.toLowerCase().includes(query);
+
+        card.hidden = !matches;
+
+        if (matches) {
+          visibleCount++;
+        }
+      });
+
+      noResults.style.display = visibleCount === 0 ? "block" : "none";
+    }
+
+    searchButton.addEventListener("click", searchServices);
+
+    searchInput.addEventListener("input", searchServices);
+
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        searchServices();
+      }
+    });
+
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+  </script>
+</body>
+</html>
