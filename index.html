@@ -492,6 +492,75 @@
 .social-links a:hover {
   background: #2563eb;
 }
+
+    .card-prices {
+      list-style: none;
+      margin: 0 0 18px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    .card-prices li {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 5px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .card-prices li:last-child { border-bottom: 0; }
+    .card-prices strong {
+      color: var(--navy);
+      white-space: nowrap;
+    }
+    .price-list-section { background: #f1f5f9; }
+    .price-category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .price-category {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      min-width: 0;
+    }
+    .price-category h3 {
+      color: var(--navy);
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+    }
+    .price-category ul { list-style: none; }
+    .price-category li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.92rem;
+    }
+    .price-category li:last-child { border-bottom: 0; }
+    .price-category li strong {
+      color: var(--navy);
+      white-space: nowrap;
+    }
+    .price-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 24px;
+    }
+    @media (max-width: 800px) {
+      .price-category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      .price-category-grid { grid-template-columns: 1fr; }
+      .price-category { padding: 18px; }
+    }
+
   </style><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
@@ -504,6 +573,7 @@
 
       <nav class="nav-links" aria-label="Main navigation">
         <a href="#services">Services</a>
+        <a href="#price-list">Prices</a>
         <a href="#tracking">Track Request</a>
         <a href="#about">About</a>
         <a href="#contact" class="button">Contact Us</a>
@@ -575,6 +645,11 @@
       application status. NEXUS CYBER is an independent service
       provider and is not a government office.
     </p>
+    <ul class="card-prices" aria-label="Example prices">
+      <li><span>eCitizen Services (Good Conduct, NTSA, etc.)</span><strong>KES 150</strong></li>
+      <li><span>SHA / NHIF Registration</span><strong>KES 150</strong></li>
+      <li><span>Other Online Forms</span><strong>KES 100</strong></li>
+    </ul>
     <a class="text-link" href="https://wa.me/254741666519?text=Hello%20NEXUS%20CYBER%2C%20I%20would%20like%20to%20enquire%20about%20Government%20%26%20eCitizen%20services." target="_blank" rel="noopener noreferrer">Enquire on WhatsApp →</a>
   </article>
 
@@ -588,6 +663,10 @@
       Tax submissions and certificates remain subject to KRA
       requirements and approval.
     </p>
+    <ul class="card-prices" aria-label="Example prices">
+      <li><span>KRA Filling</span><strong>KES 100</strong></li>
+      <li><span>New KRA</span><strong>KES 200</strong></li>
+    </ul>
     <a class="text-link" href="https://wa.me/254741666519?text=Hello%20NEXUS%20CYBER%2C%20I%20would%20like%20to%20enquire%20about%20KRA%20%26%20Tax%20Services." target="_blank" rel="noopener noreferrer">Enquire on WhatsApp →</a>
   </article>
 
@@ -600,6 +679,11 @@
       and navigating job-search websites. Application outcomes
       depend on employers and their selection processes.
     </p>
+    <ul class="card-prices" aria-label="Example prices">
+      <li><span>CV Writing / Editing</span><strong>KES 150</strong></li>
+      <li><span>Cover Letter Writing</span><strong>KES 100</strong></li>
+      <li><span>Job Application Assistance</span><strong>KES 150</strong></li>
+    </ul>
     <a class="text-link" href="https://wa.me/254741666519?text=Hello%20NEXUS%20CYBER%2C%20I%20would%20like%20to%20enquire%20about%20Jobs%20%26%20Careers." target="_blank" rel="noopener noreferrer">Enquire on WhatsApp →</a>
   </article>
 
@@ -613,6 +697,11 @@
       business setup. Registrations remain subject to the
       relevant authority's requirements and approval.
     </p>
+    <ul class="card-prices" aria-label="Example prices">
+      <li><span>Receipt / Invoice Design</span><strong>KES 200</strong></li>
+      <li><span>Company Profile Design</span><strong>KES 200</strong></li>
+      <li><span>Tender Document Preparation</span><strong>KES 600</strong></li>
+    </ul>
     <a class="text-link" href="https://wa.me/254741666519?text=Hello%20NEXUS%20CYBER%2C%20I%20would%20like%20to%20enquire%20about%20Business%20Services." target="_blank" rel="noopener noreferrer">Enquire on WhatsApp →</a>
   </article>
 
@@ -624,6 +713,11 @@
       typing, document formatting, file conversion, and help
       filling out forms using information you provide.
     </p>
+    <ul class="card-prices" aria-label="Example prices">
+      <li><span>Typing / Document (per page)</span><strong>KES 20</strong></li>
+      <li><span>Data Entry (per page)</span><strong>KES 20</strong></li>
+      <li><span>Poster / Flyer (A4)</span><strong>KES 150</strong></li>
+    </ul>
     <a class="text-link" href="https://wa.me/254741666519?text=Hello%20NEXUS%20CYBER%2C%20I%20would%20like%20to%20enquire%20about%20Printing%20%26%20Documents." target="_blank" rel="noopener noreferrer">Enquire on WhatsApp →</a>
   </article>
 
@@ -636,6 +730,11 @@
       email, file management, and essential digital skills
       for work, study, and everyday online services.
     </p>
+    <ul class="card-prices" aria-label="Example prices">
+      <li><span>AI Tool Guidance (per session)</span><strong>KES 100</strong></li>
+      <li><span>Google Docs / Sheets / Slides (per page)</span><strong>KES 20</strong></li>
+      <li><span>PowerPoint Presentation (per slide)</span><strong>KES 10</strong></li>
+    </ul>
     <a class="text-link" href="https://wa.me/254741666519?text=Hello%20NEXUS%20CYBER%2C%20I%20would%20like%20to%20enquire%20about%20Computer%20Training." target="_blank" rel="noopener noreferrer">Enquire on WhatsApp →</a>
   </article>
 
@@ -650,6 +749,10 @@
       registration decisions are determined by the responsible
       authority.
     </p>
+    <ul class="card-prices" aria-label="Example prices">
+      <li><span>SHA / NHIF Registration</span><strong>KES 150</strong></li>
+      <li><span>NSSF Services</span><strong>KES 150</strong></li>
+    </ul>
     <a class="text-link" href="https://wa.me/254741666519?text=Hello%20NEXUS%20CYBER%2C%20I%20would%20like%20to%20enquire%20about%20SHA%20%26%20Health%20Services." target="_blank" rel="noopener noreferrer">Enquire on WhatsApp →</a>
   </article>
 
@@ -663,6 +766,11 @@
       other digital services. Requirements and approvals depend
       on the relevant service provider or authority.
     </p>
+    <ul class="card-prices" aria-label="Example prices">
+      <li><span>Scholarship / Bursary Applications</span><strong>KES 200</strong></li>
+      <li><span>Other Online Forms</span><strong>KES 100</strong></li>
+      <li><span>Email Creation</span><strong>KES 30</strong></li>
+    </ul>
     <a class="text-link" href="https://wa.me/254741666519?text=Hello%20NEXUS%20CYBER%2C%20I%20would%20like%20to%20enquire%20about%20General%20Online%20Services." target="_blank" rel="noopener noreferrer">Enquire on WhatsApp →</a>
   </article>
 </div>
@@ -670,6 +778,105 @@
         <p class="no-results" id="noResults" role="status">
           No matching services found. Try another search term.
         </p>
+      </div>
+    </section>
+
+    <section class="price-list-section" id="price-list">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Complete Price List</h2>
+          <p>Browse our service prices by category. Prices are in Kenyan shillings (KES).</p>
+        </div>
+        <div class="price-category-grid">
+          <article class="price-category">
+            <h3>Graphic Design</h3>
+            <ul>
+              <li><span>Poster / Flyer (A4)</span><strong>KES 150</strong></li>
+              <li><span>Banner Design</span><strong>KES 500</strong></li>
+              <li><span>Business Card</span><strong>KES 200</strong></li>
+              <li><span>Certificate Design</span><strong>KES 200</strong></li>
+              <li><span>Social Media Post</span><strong>KES 100</strong></li>
+            </ul>
+          </article>
+          <article class="price-category">
+            <h3>Computer Work</h3>
+            <ul>
+              <li><span>Typing / Document (per page)</span><strong>KES 20</strong></li>
+              <li><span>Google Docs / Sheets / Slides (per page)</span><strong>KES 20</strong></li>
+              <li><span>Google Form Creation (per page)</span><strong>KES 50</strong></li>
+              <li><span>Data Entry (per page)</span><strong>KES 20</strong></li>
+            </ul>
+          </article>
+          <article class="price-category">
+            <h3>Online Applications</h3>
+            <ul>
+              <li><span>HELB Application Assistance</span><strong>KES 150</strong></li>
+              <li><span>KUCCPS Application Assistance</span><strong>KES 150</strong></li>
+              <li><span>KRA Filling</span><strong>KES 100</strong></li>
+              <li><span>New KRA</span><strong>KES 200</strong></li>
+              <li><span>eCitizen Services (Good Conduct, NTSA, etc.)</span><strong>KES 150</strong></li>
+              <li><span>SHA / NHIF Registration</span><strong>KES 150</strong></li>
+              <li><span>NSSF Services</span><strong>KES 150</strong></li>
+              <li><span>Scholarship / Bursary Applications</span><strong>KES 200</strong></li>
+              <li><span>Other Online Forms</span><strong>KES 100</strong></li>
+            </ul>
+          </article>
+          <article class="price-category">
+            <h3>Digital Support</h3>
+            <ul>
+              <li><span>WhatsApp Issues (Setup / Fix)</span><strong>KES 50</strong></li>
+              <li><span>Facebook Login Issues</span><strong>KES 50</strong></li>
+              <li><span>Email Creation</span><strong>KES 30</strong></li>
+              <li><span>Email Retrieval / Recovery</span><strong>KES 100</strong></li>
+              <li><span>General Phone / App Support</span><strong>KES 100</strong></li>
+            </ul>
+          </article>
+          <article class="price-category">
+            <h3>AI &amp; Productivity Support</h3>
+            <ul>
+              <li><span>AI Tool Guidance (per session)</span><strong>KES 100</strong></li>
+              <li><span>AI Content / Assignment Help (per page)</span><strong>KES 50</strong></li>
+              <li><span>AI Presentation / Report Support</span><strong>KES 100</strong></li>
+            </ul>
+          </article>
+          <article class="price-category">
+            <h3>CV &amp; Job Services</h3>
+            <ul>
+              <li><span>CV Writing / Editing</span><strong>KES 150</strong></li>
+              <li><span>Cover Letter Writing</span><strong>KES 100</strong></li>
+              <li><span>LinkedIn Profile Setup</span><strong>KES 50</strong></li>
+              <li><span>Job Application Assistance</span><strong>KES 150</strong></li>
+            </ul>
+          </article>
+          <article class="price-category">
+            <h3>Social Media Services</h3>
+            <ul>
+              <li><span>Account Creation (Facebook, Instagram, TikTok)</span><strong>KES 50</strong></li>
+              <li><span>Page Setup for Businesses</span><strong>KES 100</strong></li>
+              <li><span>Social Media Management (weekly)</span><strong>KES 300</strong></li>
+              <li><span>Content Writing (Captions, Ads, Blogs) (per post)</span><strong>KES 100</strong></li>
+            </ul>
+          </article>
+          <article class="price-category">
+            <h3>Business Support Services</h3>
+            <ul>
+              <li><span>Receipt / Invoice Design</span><strong>KES 200</strong></li>
+              <li><span>Company Profile Design</span><strong>KES 200</strong></li>
+              <li><span>Letterheads &amp; Official Documents</span><strong>KES 200</strong></li>
+              <li><span>Tender Document Preparation</span><strong>KES 600</strong></li>
+            </ul>
+          </article>
+          <article class="price-category">
+            <h3>Student Support Services</h3>
+            <ul>
+              <li><span>Assignment Formatting (per page)</span><strong>KES 15</strong></li>
+              <li><span>Research Typing &amp; Editing (per page)</span><strong>KES 30</strong></li>
+              <li><span>Plagiarism Checking (per page)</span><strong>KES 30</strong></li>
+              <li><span>PowerPoint Presentation Design (per slide)</span><strong>KES 10</strong></li>
+            </ul>
+          </article>
+        </div>
+        <p class="price-note">Prices are shown as listed. Please confirm the applicable service and any requirements with NEXUS CYBER before proceeding.</p>
       </div>
     </section>
 
@@ -719,41 +926,23 @@
       <div class="container">
         <div class="contact-card">
           <h2>Need assistance?</h2>
+          <p>Contact NEXUS CYBER for service enquiries.</p>
           <p>
-            Contact NEXUS CYBER to enquire about a service, ask a question
-            or find out which documents may be required.
+            <strong>Phone / WhatsApp:</strong>
+            <a href="tel:+254741666519">+254 741 666 519</a>
           </p>
           <p>
-           <section class="contact" id="contact">
-  <div class="container">
-    <div class="contact-card">
-      <h2>Need assistance?</h2>
-
-      <p>Contact NEXUS CYBER for service enquiries.</p>
-
-      <p>
-        <strong>Phone / WhatsApp:</strong>
-        <a href="tel:+254741666519">+254 741 666 519</a>
-      </p>
-
-      <p>
-        <strong>Business hours:</strong>
-        Monday–Saturday, 8:00 AM–9:00 PM
-      </p>
-
-      <div class="hero-actions" style="justify-content: center; margin-top: 22px;">
-        <a class="button" href="https://wa.me/254741666519"
-           target="_blank" rel="noopener noreferrer">
-          Chat on WhatsApp
-        </a>
-
-        <a class="button button-outline" href="tel:+254741666519">
-          Call Us
-        </a>
+            <strong>Business hours:</strong>
+            Monday–Saturday, 8:00 AM–9:00 PM
+          </p>
+          <div class="hero-actions" style="justify-content: center; margin-top: 22px;">
+            <a class="button" href="https://wa.me/254741666519" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+            <a class="button button-outline" href="tel:+254741666519">Call Us</a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
+  </main>
 
   <footer>
   <div class="container">
