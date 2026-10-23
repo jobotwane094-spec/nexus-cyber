@@ -124,11 +124,10 @@
     const service_name = $("serviceName").value.trim();
     const description = $("description").value.trim();
     if (!service_name) return message("Enter a service name.");
-    const { error } = await supabaseClient.from("service_requests").insert({
-      client_id: currentUser.id,
-      service_name,
-      description: description || null
-    });
+    const { error } = await supabaseClient.rpc("create_service_request", {
+  p_service_name: service_name,
+  p_description: description || null
+});
     if (error) return message("Request could not be submitted: " + error.message);
     $("requestForm").reset();
     message("Service request submitted.");
