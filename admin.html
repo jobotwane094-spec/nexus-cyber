@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NEXUS CYBER | Admin</title>
+  <style>
+    body{font-family:Arial,sans-serif;max-width:1000px;margin:28px auto;padding:0 16px;background:#f4f7fb;color:#172033}
+    header,section{background:white;padding:22px;margin:16px 0;border-radius:12px;box-shadow:0 2px 10px #0000000b}
+    h1,h2{color:#123b70}input,button,select{box-sizing:border-box;width:100%;padding:12px;margin:7px 0;border:1px solid #ccd5e1;border-radius:7px}
+    button{background:#1259a7;color:white;border:0;cursor:pointer;font-weight:bold}
+    button.secondary{background:#526174}.hidden{display:none}li{margin:16px 0;padding:12px;border:1px solid #e0e6ee;border-radius:8px;overflow-wrap:anywhere}
+    #message{white-space:pre-wrap}.muted{font-size:14px;color:#586579}
+  </style>
+</head>
+<body>
+<header>
+  <h1>NEXUS CYBER</h1>
+  <p>Administrator portal</p>
+  <p class="muted">Sign in with your registered administrator account.</p>
+</header>
+
+<section id="login">
+  <h2>Admin sign in</h2>
+  <form id="loginForm">
+    <input id="email" type="email" placeholder="Admin email" required>
+    <input id="password" type="password" placeholder="Password" required>
+    <button type="submit">Sign in</button>
+  </form>
+</section>
+
+<section id="adminPanel" class="hidden">
+  <h2>Service requests</h2>
+  <p id="adminEmail" class="muted"></p>
+  <button id="refresh">Refresh requests</button>
+  <ul id="requestList"></ul>
+  <button id="logout" class="secondary">Sign out</button>
+</section>
+
+<p id="message" role="status" aria-live="polite"></p>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://ymdpfswxfndtlynwjzjq.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_TvObxhi8WSmC0kuLKMLMIA_v-qVX-Pr";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const $ = id => document.getElementById(id);
+let user = null;
+
+function say(text) { $("message").textContent = text; }
+
+async function checkAdmin() {
+  const { data: sessionData, error: sessionError } = await db.auth.getSession();
+  if (sessionError) { say(sessionError.message); return; }
+
+  user = sessionData.session?.user || null;
+  $("login").classList.toggle("hidden", !!user);
+  $("adminPanel").classList.add("hidden");
+
+  if (!user) {
+    say("Sign in with your administrator account.");
+    return;
+  }
+
+  const { data, error } = await db.rpc("is_portal_admin");
+  if (error) {
+    say("Could not verify administrator access: " + error.message);
+    return;
+  }
+  if (data !== true) {
+    say("This account is not registered as a portal administrator.");
+    return;
+  }
+
+  $("adminEmail").textContent = "Signed in as " + user.email;
+  $("adminPanel").classList.remove("hidden");
+  await loadRequests();
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  say("Signing in…");
+  const { error } = await db.auth.signInWithPassword({
+    email: $("email").value.trim(),
+    password: $("password").value
+  });
+  if (error) { say("Sign-in failed: " + error.message); return; }
+  await checkAdmin();
+});
+
+async function loadRequests() {
+  const list = $("requestList");
+  list.replaceChildren();
+  say("Loading requests…");
+
+  const { data, error } = await db.from("service_requests")
+    .select("id,client_id,service_name,description,status,payment_status,amount_kes,created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    say("Could not load requests: " + error.message);
+    return;
+  }
+
+  for (const r of data || []) {
+    const item = document.createElement("li");
+    const heading = document.createElement("strong");
+    heading.textContent = r.service_name + " — " + r.status;
+
+    const details = document.createElement("p");
+    details.textContent = "Client ID: " + r.client_id +
+      " | Payment: " + r.payment_status +
+      " | Amount: KES " + r.amount_kes +
+      " | Created: " + new Date(r.created_at).toLocaleString();
+
+    const description = document.createElement("p");
+    description.textContent = r.description || "No description supplied.";
+
+    item.append(heading, details, description);
+    list.append(item);
+  }
+
+  say((data || []).length + " request(s) loaded.");
+}
+
+$("refresh").addEventListener("click", loadRequests);
+$("logout").addEventListener("click", async () => {
+  await db.auth.signOut();
+  user = null;
+  $("adminPanel").classList.add("hidden");
+  $("login").classList.remove("hidden");
+  say("Signed out.");
+});
+
+db.auth.onAuthStateChange(() => setTimeout(checkAdmin, 0));
+checkAdmin();
+</script>
+</body>
+</html>
