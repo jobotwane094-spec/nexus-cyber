@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NEXUS CYBER | Client Portal</title>
+  <style>
+    body{font-family:Arial,sans-serif;max-width:850px;margin:30px auto;padding:0 16px;background:#f4f7fb;color:#172033}
+    header,section{background:white;padding:22px;margin:16px 0;border-radius:12px;box-shadow:0 2px 10px #0000000b}
+    h1,h2{color:#123b70} input,textarea,button{box-sizing:border-box;width:100%;padding:12px;margin:7px 0;border:1px solid #ccd5e1;border-radius:7px}
+    button{background:#1259a7;color:white;border:0;cursor:pointer;font-weight:bold}
+    button.secondary{background:#526174} .hidden{display:none}.muted{color:#586579;font-size:14px}
+    li{margin:12px 0;overflow-wrap:anywhere} #message{white-space:pre-wrap}
+  </style>
+</head>
+<body>
+<header>
+  <h1>NEXUS CYBER</h1>
+  <p>Client Portal</p>
+  <p class="muted">Sign in to request services and manage your documents.</p>
+</header>
+
+<section id="auth">
+  <h2>Client account</h2>
+  <form id="authForm">
+    <input id="email" type="email" placeholder="Email address" required>
+    <input id="password" type="password" placeholder="Password (at least 8 characters)" minlength="8" required>
+    <button type="submit" id="signin">Sign in</button>
+    <button type="button" class="secondary" id="signup">Create account</button>
+  </form>
+</section>
+
+<section id="dashboard" class="hidden">
+  <h2>Your dashboard</h2>
+  <p id="signedInAs" class="muted"></p>
+  <button id="signout" class="secondary">Sign out</button>
+
+  <h2>Request a service</h2>
+  <form id="requestForm">
+    <input id="serviceName" placeholder="Service name" required maxlength="120">
+    <textarea id="description" placeholder="Describe what you need (optional)" maxlength="2000"></textarea>
+    <button type="submit">Submit request</button>
+  </form>
+
+  <h2>Your requests</h2>
+  <button id="refreshRequests" class="secondary">Refresh requests</button>
+  <ul id="requests"></ul>
+
+  <h2>Upload a document</h2>
+  <p class="muted">Upload only documents needed for your service request.</p>
+  <input id="document" type="file" required>
+  <button id="upload">Upload document</button>
+  <p class="muted">Uploaded files are stored in a private bucket.</p>
+</section>
+
+<p id="message" role="status" aria-live="polite"></p>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "ymdpfswxfndtlynwjzjq";
+  const SUPABASE_PUBLISHABLE_KEY = "eu-west-1";
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
+  );
+
+  const $ = id => document.getElementById(id);
+  let currentUser = null;
+
+  function message(text) { $("message").textContent = text; }
+  function safeFileName(name) {
+    return name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]/g, "_").slice(-100) || "document";
+  }
+
+  async function updateSession() {
+    const { data, error } = await supabaseClient.auth.getSession();
+    if (error) { message(error.message); return; }
+    currentUser = data.session?.user || null;
+    $("auth").classList.toggle("hidden", !!currentUser);
+    $("dashboard").classList.toggle("hidden", !currentUser);
+    $("signedInAs").textContent = currentUser ? "Signed in as " + currentUser.email : "";
+    if (currentUser) await loadRequests();
+  }
+
+  $("authForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    message("Signing in…");
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: $("email").value.trim(),
+      password: $("password").value
+    });
+    if (error) { message(error.message); return; }
+    currentUser = data.user;
+    message("Signed in successfully.");
+    await updateSession();
+  });
+
+  $("signup").addEventListener("click", async () => {
+    const email = $("email").value.trim();
+    const password = $("password").value;
+    if (!email || password.length < 8) {
+      message("Enter your email and a password of at least 8 characters.");
+      return;
+    }
+    message("Creating account…");
+    const { error } = await supabaseClient.auth.signUp({
+      email, password,
+      options: {
+        emailRedirectTo: location.origin + location.pathname
+      }
+    });
+    message(error ? error.message :
+      "Account request submitted. Check your email for the confirmation link.");
+  });
+
+  $("signout").addEventListener("click", async () => {
+    const { error } = await supabaseClient.auth.signOut();
+    message(error ? error.message : "Signed out.");
+    await updateSession();
+  });
+
+  $("requestForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!currentUser) return message("Please sign in again.");
+    const service_name = $("serviceName").value.trim();
+    const description = $("description").value.trim();
+    if (!service_name) return message("Enter a service name.");
+    const { error } = await supabaseClient.from("service_requests").insert({
+      client_id: currentUser.id,
+      service_name,
+      description: description || null
+    });
+    if (error) return message("Request could not be submitted: " + error.message);
+    $("requestForm").reset();
+    message("Service request submitted.");
+    await loadRequests();
+  });
+
+  async function loadRequests() {
+    if (!currentUser) return;
+    const list = $("requests");
+    list.replaceChildren();
+    const { data, error } = await supabaseClient.from("service_requests")
+      .select("id,service_name,description,status,payment_status,created_at")
+      .order("created_at", { ascending: false });
+    if (error) return message("Could not load requests: " + error.message);
+    for (const request of data || []) {
+      const item = document.createElement("li");
+      const title = document.createElement("strong");
+      title.textContent = request.service_name + " — " + request.status;
+      const details = document.createElement("div");
+      details.textContent = (request.description || "No description") +
+        " | Payment: " + request.payment_status +
+        " | " + new Date(request.created_at).toLocaleString();
+      item.append(title, details);
+      list.append(item);
+    }
+    if (!data?.length) {
+      const item = document.createElement("li");
+      item.textContent = "No service requests yet.";
+      list.append(item);
+    }
+  }
+
+  $("refreshRequests").addEventListener("click", loadRequests);
+
+  $("upload").addEventListener("click", async () => {
+    if (!currentUser) return message("Please sign in again.");
+    const file = $("document").files[0];
+    if (!file) return message("Choose a document first.");
+    const maxBytes = 10 * 1024 * 1024;
+    if (file.size > maxBytes) return message("Maximum file size is 10 MB.");
+    const path = currentUser.id + "/" + crypto.randomUUID() + "-" + safeFileName(file.name);
+    message("Uploading document…");
+    const { error } = await supabaseClient.storage
+      .from("client-documents").upload(path, file, {
+        upsert: false,
+        contentType: file.type || "application/octet-stream"
+      });
+    message(error ? "Upload failed: " + error.message : "Document uploaded successfully.");
+    if (!error) $("document").value = "";
+  });
+
+  supabaseClient.auth.onAuthStateChange(() => {
+    setTimeout(updateSession, 0);
+  });
+  updateSession();
+</script>
+</body>
+</html>
