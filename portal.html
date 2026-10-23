@@ -83,6 +83,7 @@
 
   $("authForm").addEventListener("submit", async event => {
     event.preventDefault();
+  message("Submitting service request…");
     message("Signing in…");
     const { data, error } = await supabaseClient.auth.signInWithPassword({
       email: $("email").value.trim(),
