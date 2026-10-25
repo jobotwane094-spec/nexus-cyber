@@ -27,6 +27,26 @@
     <input id="password" type="password" placeholder="Password (at least 8 characters)" minlength="8" required>
     <button type="submit" id="signin">Sign in</button>
     <button type="button" class="secondary" id="signup">Create account</button>
+    <button type="button" class="secondary" id="forgotPassword">Forgot password?</button>
+  </form>
+</section>
+
+<section id="resetRequest" class="hidden">
+  <h2>Reset your password</h2>
+  <p>Enter your account email to receive a password-reset link.</p>
+  <form id="resetRequestForm">
+    <input id="resetEmail" type="email" placeholder="Email address" required>
+    <button type="submit">Send reset link</button>
+    <button type="button" class="secondary" id="cancelReset">Back to sign in</button>
+  </form>
+</section>
+
+<section id="newPasswordSection" class="hidden">
+  <h2>Choose a new password</h2>
+  <form id="newPasswordForm">
+    <input id="newPassword" type="password" placeholder="New password (at least 8 characters)" minlength="8" required>
+    <input id="confirmNewPassword" type="password" placeholder="Confirm new password" minlength="8" required>
+    <button type="submit">Save new password</button>
   </form>
 </section>
 
@@ -65,13 +85,83 @@
 
   const $ = id => document.getElementById(id);
   let currentUser = null;
+  let recoveryMode = false;
 
   function message(text) { $("message").textContent = text; }
+
   function safeFileName(name) {
     return name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]/g, "_").slice(-100) || "document";
   }
 
+  function showPasswordResetForm() {
+    recoveryMode = true;
+    $("auth").classList.add("hidden");
+    $("dashboard").classList.add("hidden");
+    $("resetRequest").classList.add("hidden");
+    $("newPasswordSection").classList.remove("hidden");
+    message("Enter and confirm your new password.");
+  }
+
+  $("forgotPassword").addEventListener("click", () => {
+    $("auth").classList.add("hidden");
+    $("dashboard").classList.add("hidden");
+    $("resetRequest").classList.remove("hidden");
+    $("resetEmail").value = $("email").value.trim();
+    message("");
+  });
+
+  $("cancelReset").addEventListener("click", () => {
+    $("resetRequest").classList.add("hidden");
+    $("auth").classList.remove("hidden");
+    message("");
+  });
+
+  $("resetRequestForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const email = $("resetEmail").value.trim();
+    message("Sending password-reset email…");
+
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: location.origin + location.pathname
+    });
+
+    message(error
+      ? "Could not send reset email: " + error.message
+      : "If an account exists for that email, a password-reset link has been sent. Check your inbox.");
+  });
+
+  $("newPasswordForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const password = $("newPassword").value;
+    const confirmation = $("confirmNewPassword").value;
+
+    if (password.length < 8) {
+      message("Your new password must be at least 8 characters.");
+      return;
+    }
+    if (password !== confirmation) {
+      message("The passwords do not match.");
+      return;
+    }
+
+    message("Saving your new password…");
+    const { error } = await supabaseClient.auth.updateUser({ password });
+
+    if (error) {
+      message("Password could not be updated: " + error.message);
+      return;
+    }
+
+    $("newPasswordForm").reset();
+    recoveryMode = false;
+    $("newPasswordSection").classList.add("hidden");
+    await supabaseClient.auth.signOut();
+    $("auth").classList.remove("hidden");
+    message("Password updated successfully. Sign in with your new password.");
+  });
+
   async function updateSession() {
+    if (recoveryMode) return;
     const { data, error } = await supabaseClient.auth.getSession();
     if (error) { message(error.message); return; }
     currentUser = data.session?.user || null;
@@ -83,7 +173,6 @@
 
   $("authForm").addEventListener("submit", async event => {
     event.preventDefault();
-  message("Submitting service request…");
     message("Signing in…");
     const { data, error } = await supabaseClient.auth.signInWithPassword({
       email: $("email").value.trim(),
@@ -125,10 +214,12 @@
     const service_name = $("serviceName").value.trim();
     const description = $("description").value.trim();
     if (!service_name) return message("Enter a service name.");
+
     const { error } = await supabaseClient.rpc("create_service_request", {
-  p_service_name: service_name,
-  p_description: description || null
-});
+      p_service_name: service_name,
+      p_description: description || null
+    });
+
     if (error) return message("Request could not be submitted: " + error.message);
     $("requestForm").reset();
     message("Service request submitted.");
@@ -143,6 +234,7 @@
       .select("id,service_name,description,status,payment_status,created_at")
       .order("created_at", { ascending: false });
     if (error) return message("Could not load requests: " + error.message);
+
     for (const request of data || []) {
       const item = document.createElement("li");
       const title = document.createElement("strong");
@@ -154,6 +246,7 @@
       item.append(title, details);
       list.append(item);
     }
+
     if (!data?.length) {
       const item = document.createElement("li");
       item.textContent = "No service requests yet.";
@@ -169,6 +262,7 @@
     if (!file) return message("Choose a document first.");
     const maxBytes = 10 * 1024 * 1024;
     if (file.size > maxBytes) return message("Maximum file size is 10 MB.");
+
     const path = currentUser.id + "/" + crypto.randomUUID() + "-" + safeFileName(file.name);
     message("Uploading document…");
     const { error } = await supabaseClient.storage
@@ -180,10 +274,20 @@
     if (!error) $("document").value = "";
   });
 
-  supabaseClient.auth.onAuthStateChange(() => {
+  supabaseClient.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") {
+      showPasswordResetForm();
+      return;
+    }
     setTimeout(updateSession, 0);
   });
-  updateSession();
+
+  const recoveryLink = new URLSearchParams(location.hash.slice(1)).get("type") === "recovery";
+  if (recoveryLink) {
+    showPasswordResetForm();
+  } else {
+    updateSession();
+  }
 </script>
 </body>
 </html>
